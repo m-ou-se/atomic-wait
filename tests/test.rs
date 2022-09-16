@@ -34,6 +34,6 @@ fn wait_wake() {
             a.wait(0);
         }
         assert_eq!(a.load(Relaxed), 1);
-        assert!((100..200).contains(&t.elapsed().as_millis()));
+        assert!((90..400).contains(&t.elapsed().as_millis()));
     });
 }
