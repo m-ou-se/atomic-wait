@@ -1,7 +1,4 @@
-use core::{
-    ffi::c_void,
-    sync::atomic::{AtomicU32, Ordering::Relaxed},
-};
+use core::sync::atomic::{AtomicU32, Ordering::Relaxed};
 use windows_sys::Win32::System::{
     Threading::{WaitOnAddress, WakeByAddressAll, WakeByAddressSingle},
     WindowsProgramming::INFINITE,
