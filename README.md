@@ -1,4 +1,4 @@
-Cross platform atomic wait and wake functionality (aka futexes).
+Cross platform atomic wait and wake (aka futex) functionality.
 
 This crate only supports functionality that's available on all of
 Linux, Windows, and macOS. That is:
