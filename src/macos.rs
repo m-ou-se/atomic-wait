@@ -33,20 +33,35 @@ extern "C" {
     // std::__1::__cxx_atomic_notify_all(void const volatile*)
     #[link_name = "_ZNSt3__123__cxx_atomic_notify_allEPVKv"]
     fn __cxx_atomic_notify_all(ptr: *const c_void);
+
+    // Next to the four `void const volatile*` functions above, there are also
+    // overloads for `__cxx_atomic_contention_t const volatile*` (where
+    // `__cxx_atomic_contention_t` is basically `AtomicI64`), specifically for
+    // 64-bit atomics. Those don't use a separate futex in a table, but instead
+    // use the atomic itself as the futex, which can be more efficient.
+    // However, because of the monitor+wait API design here, that can result in
+    // missed wakeups, due to the ABA problem. So, we simply don't use those.
+    // See https://reviews.llvm.org/D114119#3193088
 }
 
 pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
     let ptr: *const AtomicU32 = a;
     loop {
+        // Don't go to sleep if the value has changed.
         let current = a.load(Relaxed);
         if current != expected {
             return current;
         }
+        // The 'monitor' is just the notification counter associated
+        // with the address of the atomic.
         let monitor = unsafe { __libcpp_atomic_monitor(ptr.cast()) };
+        // Check again if we should still go to sleep.
         let current = a.load(Relaxed);
         if current != expected {
             return current;
         }
+        // Wait, but only if there's been no new notifications
+        // since we acquired the monitor.
         unsafe { __libcpp_atomic_wait(ptr.cast(), monitor) };
     }
 }
