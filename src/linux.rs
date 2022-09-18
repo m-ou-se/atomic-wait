@@ -3,6 +3,7 @@ use core::{
     sync::atomic::{AtomicU32, Ordering::Relaxed},
 };
 
+#[inline]
 pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
     let ptr: *const AtomicU32 = a;
     loop {
@@ -22,6 +23,7 @@ pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
     }
 }
 
+#[inline]
 pub fn wake_one(a: &AtomicU32) {
     let ptr: *const AtomicU32 = a;
     unsafe {
@@ -34,6 +36,7 @@ pub fn wake_one(a: &AtomicU32) {
     };
 }
 
+#[inline]
 pub fn wake_all(a: &AtomicU32) {
     let ptr: *const AtomicU32 = a;
     unsafe {

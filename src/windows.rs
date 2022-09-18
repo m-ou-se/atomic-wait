@@ -4,6 +4,7 @@ use windows_sys::Win32::System::{
     WindowsProgramming::INFINITE,
 };
 
+#[inline]
 pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
     let ptr: *const AtomicU32 = a;
     let expected_ptr: *const u32 = &expected;
@@ -16,11 +17,13 @@ pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
     }
 }
 
+#[inline]
 pub fn wake_one(a: &AtomicU32) {
     let ptr: *const AtomicU32 = a;
     unsafe { WakeByAddressSingle(ptr.cast()) };
 }
 
+#[inline]
 pub fn wake_all(a: &AtomicU32) {
     let ptr: *const AtomicU32 = a;
     unsafe { WakeByAddressAll(ptr.cast()) };

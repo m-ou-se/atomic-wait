@@ -44,6 +44,7 @@ extern "C" {
     // See https://reviews.llvm.org/D114119#3193088
 }
 
+#[inline]
 pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
     let ptr: *const AtomicU32 = a;
     loop {
@@ -66,11 +67,13 @@ pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
     }
 }
 
+#[inline]
 pub fn wake_one(a: &AtomicU32) {
     let ptr: *const AtomicU32 = a;
     unsafe { __cxx_atomic_notify_one(ptr.cast()) };
 }
 
+#[inline]
 pub fn wake_all(a: &AtomicU32) {
     let ptr: *const AtomicU32 = a;
     unsafe { __cxx_atomic_notify_all(ptr.cast()) };

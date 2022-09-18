@@ -35,14 +35,17 @@ pub trait AtomicWait {
 impl AtomicWait for AtomicU32 {
     type Value = u32;
 
+    #[inline]
     fn wait(&self, value: u32) -> u32 {
         platform::wait(self, value)
     }
 
+    #[inline]
     fn wake_one(&self) {
         platform::wake_one(self);
     }
 
+    #[inline]
     fn wake_all(&self) {
         platform::wake_all(self);
     }
