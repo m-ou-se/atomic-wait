@@ -1,7 +1,5 @@
-use core::{
-    ffi::c_void,
-    sync::atomic::{AtomicU32, Ordering::Relaxed},
-};
+use super::AtomicWaitInternal;
+use core::ffi::c_void;
 
 // On macOS, atomic wait/wake functionality is not available through
 // any public/stable C interface, but is available through libc++.
@@ -45,20 +43,21 @@ extern "C" {
 }
 
 #[inline]
-pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
-    let ptr: *const AtomicU32 = a;
+pub(crate) fn wait<T: AtomicWaitInternal>(a: &T, expected: T::Value) -> T::Value
+where
+    T::Value: Copy,
+{
+    let ptr: *const T = a;
     loop {
         // Don't go to sleep if the value has changed.
-        let current = a.load(Relaxed);
-        if current != expected {
+        if let Err(current) = a.check_value(expected) {
             return current;
         }
         // The 'monitor' is just the notification counter associated
         // with the address of the atomic.
         let monitor = unsafe { __libcpp_atomic_monitor(ptr.cast()) };
         // Check again if we should still go to sleep.
-        let current = a.load(Relaxed);
-        if current != expected {
+        if let Err(current) = a.check_value(expected) {
             return current;
         }
         // Wait, but only if there's been no new notifications
@@ -68,13 +67,11 @@ pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
 }
 
 #[inline]
-pub fn wake_one(a: &AtomicU32) {
-    let ptr: *const AtomicU32 = a;
+pub fn wake_one(ptr: *const ()) {
     unsafe { __cxx_atomic_notify_one(ptr.cast()) };
 }
 
 #[inline]
-pub fn wake_all(a: &AtomicU32) {
-    let ptr: *const AtomicU32 = a;
+pub fn wake_all(ptr: *const ()) {
     unsafe { __cxx_atomic_notify_all(ptr.cast()) };
 }

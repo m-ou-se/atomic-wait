@@ -1,7 +1,7 @@
 #![no_std]
 #![doc = include_str!("../README.md")]
 
-use core::sync::atomic::AtomicU32;
+use core::sync::atomic::{AtomicU32, Ordering::Relaxed};
 
 #[cfg(any(target_os = "linux", target_os = "android"))]
 #[path = "linux.rs"]
@@ -32,6 +32,21 @@ pub trait AtomicWait {
     fn wake_all(&self);
 }
 
+trait AtomicWaitInternal: AtomicWait {
+    fn check_value(&self, value: Self::Value) -> Result<(), Self::Value>;
+}
+
+impl AtomicWaitInternal for AtomicU32 {
+    fn check_value(&self, value: Self::Value) -> Result<(), Self::Value> {
+        let current = self.load(Relaxed);
+        if current != value {
+            Err(current)
+        } else {
+            Ok(())
+        }
+    }
+}
+
 impl AtomicWait for AtomicU32 {
     type Value = u32;
 
@@ -42,11 +57,13 @@ impl AtomicWait for AtomicU32 {
 
     #[inline]
     fn wake_one(&self) {
-        platform::wake_one(self);
+        let ptr: *const _ = self;
+        platform::wake_one(ptr.cast());
     }
 
     #[inline]
     fn wake_all(&self) {
-        platform::wake_all(self);
+        let ptr: *const _ = self;
+        platform::wake_all(ptr.cast());
     }
 }
