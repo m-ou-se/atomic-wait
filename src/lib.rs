@@ -20,7 +20,7 @@ mod platform;
 /// Returns the new value,
 /// which is guaranteed to be different than `value`.
 #[inline]
-pub fn wait(atomic: &AtomicU32, value: u32) -> u32{
+pub fn wait(atomic: &AtomicU32, value: u32) -> u32 {
     platform::wait(atomic, value)
 }
 

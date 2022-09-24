@@ -1,4 +1,4 @@
-use atomic_wait::{wait, wake_one, wake_all};
+use atomic_wait::{wait, wake_all, wake_one};
 use std::{
     sync::atomic::{AtomicU32, Ordering::Relaxed},
     thread::sleep,
