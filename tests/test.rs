@@ -6,6 +6,12 @@ use std::{
 };
 
 #[test]
+fn wake_null() {
+    wake_one(std::ptr::null::<AtomicU32>());
+    wake_all(std::ptr::null::<AtomicU32>());
+}
+
+#[test]
 fn wake_nothing() {
     let a = AtomicU32::new(0);
     wake_one(&a);
