@@ -1,7 +1,4 @@
-use core::{
-    ffi::c_void,
-    sync::atomic::{AtomicU32, Ordering::Relaxed},
-};
+use core::sync::atomic::{AtomicU32, Ordering::Relaxed};
 
 #[inline]
 pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
@@ -16,7 +13,7 @@ pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
                 a,
                 libc::FUTEX_WAIT | libc::FUTEX_PRIVATE_FLAG,
                 expected,
-                core::ptr::null_mut::<c_void>(),
+                core::ptr::null::<libc::timespec>(),
             );
         };
     }
