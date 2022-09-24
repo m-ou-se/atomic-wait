@@ -5,7 +5,6 @@ use core::{
 
 #[inline]
 pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
-    let ptr: *const AtomicU32 = a;
     loop {
         let current = a.load(Relaxed);
         if current != expected {
@@ -14,7 +13,7 @@ pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
         unsafe {
             libc::syscall(
                 libc::SYS_futex,
-                ptr,
+                a,
                 libc::FUTEX_WAIT | libc::FUTEX_PRIVATE_FLAG,
                 expected,
                 core::ptr::null_mut::<c_void>(),
@@ -24,8 +23,7 @@ pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
 }
 
 #[inline]
-pub fn wake_one(a: &AtomicU32) {
-    let ptr: *const AtomicU32 = a;
+pub fn wake_one(ptr: *const AtomicU32) {
     unsafe {
         libc::syscall(
             libc::SYS_futex,
@@ -37,8 +35,7 @@ pub fn wake_one(a: &AtomicU32) {
 }
 
 #[inline]
-pub fn wake_all(a: &AtomicU32) {
-    let ptr: *const AtomicU32 = a;
+pub fn wake_all(ptr: *const AtomicU32) {
     unsafe {
         libc::syscall(
             libc::SYS_futex,

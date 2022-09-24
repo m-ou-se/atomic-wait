@@ -18,13 +18,11 @@ pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
 }
 
 #[inline]
-pub fn wake_one(a: &AtomicU32) {
-    let ptr: *const AtomicU32 = a;
+pub fn wake_one(ptr: *const AtomicU32) {
     unsafe { WakeByAddressSingle(ptr.cast()) };
 }
 
 #[inline]
-pub fn wake_all(a: &AtomicU32) {
-    let ptr: *const AtomicU32 = a;
+pub fn wake_all(ptr: *const AtomicU32) {
     unsafe { WakeByAddressAll(ptr.cast()) };
 }

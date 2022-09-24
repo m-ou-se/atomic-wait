@@ -21,15 +21,15 @@ Supported platforms:
 
 ```
 use std::sync::atomic::AtomicU32;
-use atomic_wait::AtomicWait;
+use atomic_wait::{wait, wake_one, wake_all};
 
 let a = AtomicU32::new(0);
 
-a.wait(1); // If the value is 1, wait.
+wait(&a, 1); // If the value is 1, wait.
 
-a.wake_one(); // Wake one waiting thread.
+wake_one(&a); // Wake one waiting thread.
 
-a.wake_all(); // Wake all waiting threads.
+wake_all(&a); // Wake all waiting threads.
 ```
 
 ## Implementation
