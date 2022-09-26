@@ -8,13 +8,7 @@ use windows_sys::Win32::System::{
 pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
     let ptr: *const AtomicU32 = a;
     let expected_ptr: *const u32 = &expected;
-    loop {
-        let current = a.load(Relaxed);
-        if current != expected {
-            return current;
-        }
-        unsafe { WaitOnAddress(ptr.cast(), expected_ptr.cast(), 4, INFINITE) };
-    }
+    unsafe { WaitOnAddress(ptr.cast(), expected_ptr.cast(), 4, INFINITE) };
 }
 
 #[inline]

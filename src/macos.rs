@@ -45,26 +45,18 @@ extern "C" {
 }
 
 #[inline]
-pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
+pub fn wait(a: &AtomicU32, expected: u32) {
     let ptr: *const AtomicU32 = a;
-    loop {
-        // Don't go to sleep if the value has changed.
-        let current = a.load(Relaxed);
-        if current != expected {
-            return current;
-        }
-        // The 'monitor' is just the notification counter associated
-        // with the address of the atomic.
-        let monitor = unsafe { __libcpp_atomic_monitor(ptr.cast()) };
-        // Check again if we should still go to sleep.
-        let current = a.load(Relaxed);
-        if current != expected {
-            return current;
-        }
-        // Wait, but only if there's been no new notifications
-        // since we acquired the monitor.
-        unsafe { __libcpp_atomic_wait(ptr.cast(), monitor) };
+    // The 'monitor' is just the notification counter associated
+    // with the address of the atomic.
+    let monitor = unsafe { __libcpp_atomic_monitor(ptr.cast()) };
+    // Check again if we should still go to sleep.
+    if a.load(Relaxed) != expected {
+        return;
     }
+    // Wait, but only if there's been no new notifications
+    // since we acquired the monitor.
+    unsafe { __libcpp_atomic_wait(ptr.cast(), monitor) };
 }
 
 #[inline]

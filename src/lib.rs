@@ -15,12 +15,12 @@ mod platform;
 #[path = "windows.rs"]
 mod platform;
 
-/// While the value is `value`, wait until woken up.
+/// If the value is `value`, wait until woken up.
 ///
-/// Returns the new value,
-/// which is guaranteed to be different than `value`.
+/// This function might also return spuriously,
+/// without a corresponding wake operation.
 #[inline]
-pub fn wait(atomic: &AtomicU32, value: u32) -> u32 {
+pub fn wait(atomic: &AtomicU32, value: u32) {
     platform::wait(atomic, value)
 }
 

@@ -1,22 +1,16 @@
 use core::sync::atomic::{AtomicU32, Ordering::Relaxed};
 
 #[inline]
-pub fn wait(a: &AtomicU32, expected: u32) -> u32 {
-    loop {
-        let current = a.load(Relaxed);
-        if current != expected {
-            return current;
-        }
-        unsafe {
-            libc::syscall(
-                libc::SYS_futex,
-                a,
-                libc::FUTEX_WAIT | libc::FUTEX_PRIVATE_FLAG,
-                expected,
-                core::ptr::null::<libc::timespec>(),
-            );
-        };
-    }
+pub fn wait(a: &AtomicU32, expected: u32) {
+    unsafe {
+        libc::syscall(
+            libc::SYS_futex,
+            a,
+            libc::FUTEX_WAIT | libc::FUTEX_PRIVATE_FLAG,
+            expected,
+            core::ptr::null::<libc::timespec>(),
+        );
+    };
 }
 
 #[inline]
