@@ -1,4 +1,4 @@
-use core::sync::atomic::{AtomicU32, Ordering::Relaxed};
+use core::sync::atomic::AtomicU32;
 
 #[inline]
 pub fn wait(a: &AtomicU32, expected: u32) {
