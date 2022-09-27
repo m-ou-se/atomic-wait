@@ -18,15 +18,15 @@ jobs:
       run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
-#  windows:
-#    name: Build and test on Windows
-#    runs-on: windows-latest
-#    steps:
-#    - uses: actions/checkout@v1
-#    - name: Build
-#      run: cargo build --verbose
-#    - name: Run tests
-#      run: cargo test --verbose
+  windows:
+    name: Build and test on Windows
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build
+      run: cargo build --verbose
+    - name: Run tests
+      run: cargo test --verbose
   macos:
     name: Build and test on macOS
     runs-on: macos-latest
