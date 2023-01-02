@@ -15,7 +15,7 @@ mod platform;
 #[path = "windows.rs"]
 mod platform;
 
-#[cfg(any(target_os = "freebsd"))]
+#[cfg(target_os = "freebsd")]
 #[path = "freebsd.rs"]
 mod platform;
 
