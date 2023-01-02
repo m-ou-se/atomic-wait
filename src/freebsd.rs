@@ -2,9 +2,10 @@ use core::sync::atomic::AtomicU32;
 
 #[inline]
 pub fn wait(a: &AtomicU32, expected: u32) {
+    let ptr: *const AtomicU32 = a;
     unsafe {
         libc::_umtx_op(
-            core::ptr::addr_of!(*a) as *mut libc::c_void,
+            ptr as *mut libc::c_void,
             libc::UMTX_OP_WAIT_UINT_PRIVATE,
             expected as libc::c_ulong,
             core::ptr::null_mut(),
