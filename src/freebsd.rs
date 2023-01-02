@@ -4,11 +4,11 @@ use core::sync::atomic::AtomicU32;
 pub fn wait(a: &AtomicU32, expected: u32) {
     unsafe {
         libc::_umtx_op(
-	    core::ptr::addr_of!(*a) as *mut libc::c_void,
-	    libc::UMTX_OP_WAIT_UINT_PRIVATE,
+            core::ptr::addr_of!(*a) as *mut libc::c_void,
+            libc::UMTX_OP_WAIT_UINT_PRIVATE,
             expected as libc::c_ulong,
             core::ptr::null_mut::<libc::c_void>(),
-            core::ptr::null_mut::<libc::c_void>()
+            core::ptr::null_mut::<libc::c_void>(),
         );
     };
 }
@@ -17,11 +17,11 @@ pub fn wait(a: &AtomicU32, expected: u32) {
 pub fn wake_one(ptr: *const AtomicU32) {
     unsafe {
         libc::_umtx_op(
-	    ptr as *mut libc::c_void,
-	    libc::UMTX_OP_WAKE_PRIVATE,
-	    1 as libc::c_ulong,
+            ptr as *mut libc::c_void,
+            libc::UMTX_OP_WAKE_PRIVATE,
+            1 as libc::c_ulong,
             core::ptr::null_mut::<libc::c_void>(),
-            core::ptr::null_mut::<libc::c_void>()
+            core::ptr::null_mut::<libc::c_void>(),
         );
     };
 }
@@ -30,11 +30,11 @@ pub fn wake_one(ptr: *const AtomicU32) {
 pub fn wake_all(ptr: *const AtomicU32) {
     unsafe {
         libc::_umtx_op(
-	    ptr as *mut libc::c_void,
-	    libc::UMTX_OP_WAKE_PRIVATE,
-	    i32::MAX as libc::c_ulong,
+            ptr as *mut libc::c_void,
+            libc::UMTX_OP_WAKE_PRIVATE,
+            i32::MAX as libc::c_ulong,
             core::ptr::null_mut::<libc::c_void>(),
-            core::ptr::null_mut::<libc::c_void>()
+            core::ptr::null_mut::<libc::c_void>(),
         );
     };
 }
