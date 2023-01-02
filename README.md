@@ -14,7 +14,7 @@ Linux, FreeBSD, Windows, and macOS. That is:
 
 Supported platforms:
    Linux 2.6.22+,
-   FreeBSD (all supported versions),
+   FreeBSD 11+,
    Windows 8+, Windows Server 2012+,
    macOS 11+, iOS 14+, watchOS 7+.
 
