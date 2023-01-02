@@ -37,7 +37,7 @@ wake_all(&a); // Wake all waiting threads.
 
 On Linux, this uses the `SYS_futex` syscall.
 
-On Linux, this uses the `_umtx_op` syscall.
+On FreeBSD, this uses the `_umtx_op` syscall.
 
 On Windows, this uses the `WaitOnAddress` and `WakeByAddress` APIs.
 
