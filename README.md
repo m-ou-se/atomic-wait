@@ -20,7 +20,7 @@ Supported platforms:
 
 ## Usage
 
-```
+```rust
 use std::sync::atomic::AtomicU32;
 use atomic_wait::{wait, wake_one, wake_all};
 
