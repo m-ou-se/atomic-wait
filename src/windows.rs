@@ -17,6 +17,13 @@ pub fn wake_one(ptr: *const AtomicU32) {
 }
 
 #[inline]
+pub fn wake_n(ptr: *const AtomicU32, wake_count: u32) {
+    for _ in 0..wake_count {
+        wake_one(ptr);
+    }
+}
+
+#[inline]
 pub fn wake_all(ptr: *const AtomicU32) {
     unsafe { WakeByAddressAll(ptr.cast()) };
 }

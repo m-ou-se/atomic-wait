@@ -36,6 +36,27 @@ pub fn wake_one(atomic: *const AtomicU32) {
     platform::wake_one(atomic);
 }
 
+/// Wake up to n threads that are waiting on this atomic.
+///
+/// It's okay if the pointer dangles or is null.
+///
+/// ______________________
+/// **Remarks:**
+///
+/// On platforms where this is not _natively_ supported by the kernel,
+/// it is emulated with a loop to wake_one. Don't use excessively
+/// large `wake_count` if you're targeting Windows or OSX, or this
+/// loop will be too costly.
+///
+/// This is an optimization for small `wake_count`s, like 2-10, on
+/// linux and freebsd.
+/// If you're unsure, just use `wake_all()` or `wake_one()` which are
+/// universally supported.
+#[inline]
+pub fn wake_n(atomic: *const AtomicU32, wake_count: u32) {
+    platform::wake_n(atomic, wake_count);
+}
+
 /// Wake all threads that are waiting on this atomic.
 ///
 /// It's okay if the pointer dangles or is null.
