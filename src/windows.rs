@@ -1,7 +1,6 @@
 use core::sync::atomic::AtomicU32;
-use windows_sys::Win32::System::{
-    Threading::{WaitOnAddress, WakeByAddressAll, WakeByAddressSingle},
-    WindowsProgramming::INFINITE,
+use windows_sys::Win32::System::Threading::{
+    WaitOnAddress, WakeByAddressAll, WakeByAddressSingle, INFINITE,
 };
 
 #[inline]
