@@ -1,7 +1,7 @@
 Cross platform atomic wait and wake (aka futex) functionality.
 
 This crate only supports functionality that's available on all of
-Linux, FreeBSD, Windows, and macOS. That is:
+Linux, FreeBSD, OpenBSD, Windows, and macOS. That is:
 
 - Only `AtomicU32` is supported.
   (Linux currently only supports 32-bit futexes.)
@@ -15,6 +15,7 @@ Linux, FreeBSD, Windows, and macOS. That is:
 Supported platforms:
    Linux 2.6.22+,
    FreeBSD 11+,
+   OpenBSD 6.2+,
    Windows 8+, Windows Server 2012+,
    macOS 11+, iOS 14+, watchOS 7+.
 
@@ -38,6 +39,8 @@ wake_all(&a); // Wake all waiting threads.
 On Linux, this uses the `SYS_futex` syscall.
 
 On FreeBSD, this uses the `_umtx_op` syscall.
+
+On OpenBSD, this uses the `futex` syscall.
 
 On Windows, this uses the `WaitOnAddress` and `WakeByAddress` APIs.
 
