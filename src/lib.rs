@@ -19,6 +19,10 @@ mod platform;
 #[path = "freebsd.rs"]
 mod platform;
 
+#[cfg(target_os = "openbsd")]
+#[path = "openbsd.rs"]
+mod platform;
+
 /// If the value is `value`, wait until woken up.
 ///
 /// This function might also return spuriously,
